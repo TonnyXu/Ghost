@@ -4,6 +4,7 @@ const ghostVersion = require('../../lib/ghost-version');
 const crypto = require('crypto');
 const common = require('../../lib/common');
 const urlUtils = require('../../lib/url-utils');
+const config = require('../../config');
 
 const COMPLIMENTARY_PLAN = {
     name: 'Complimentary',
@@ -20,9 +21,10 @@ function getDomain() {
 }
 
 function getEmailFromAddress() {
+    const configEmailDomain = config.get('mail') && config.get('mail').domain || getDomain();
     const subscriptionSettings = settingsCache.get('members_subscription_settings') || {};
 
-    return `${subscriptionSettings.fromAddress || 'noreply'}@${getDomain()}`;
+    return `${subscriptionSettings.fromAddress || 'noreply'}@${configEmailDomain}`;
 }
 
 const getApiUrl = ({version, type}) => {
